@@ -86,7 +86,7 @@ SecurePass supports TOTP-based two-factor authentication, adding an extra layer 
 
 ## 4. System Components & Data Flow
 
-![ShyPass Architecture Diagram](./Assets/Images/shypass_acrhitecture_diagram.jpg)
+![ShyPass Architecture Diagram](Assets/Images/shypass_acrhitecture_diagram.jpg)
 
 
 ### 4.1. **Frontend (React for Web, React Native for Mobile)**
