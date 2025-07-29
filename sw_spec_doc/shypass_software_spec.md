@@ -86,7 +86,7 @@ SecurePass supports TOTP-based two-factor authentication, adding an extra layer 
 
 ## 4. System Components & Data Flow
 
-![ShyPass Architecture Diagram](/Assets/Images/shypass_acrhitecture_diagram.jpg)
+![ShyPass Architecture Diagram](./images/shypass_architecture_diagram.jpg)
 
 
 ### 4.1. **Frontend (React for Web, React Native for Mobile)**
@@ -230,8 +230,6 @@ SecurePass must comply with relevant data privacy regulations such as GDPR, CCPA
 
 
 ---
-### Note
-Shypass is a fictious application follows a design architecture inspired by open-source password managers such as Bitwarden, with strong encryption practices, client-side key derivation, and modern web-mobile integrations.
 
 
-[def]: spec\Assets\shypass_acrhitecture_diagram.png
+

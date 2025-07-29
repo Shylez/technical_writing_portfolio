@@ -1,6 +1,0 @@
-- [🏠 Home](README.md)
-- [📄 API Documentation](api.md)
-- [📄 Software Specification](spec\shypass_software_spec.md)
-- [📄 Deployment Walkthrough](deployment\slack_deployment_walkthrough.md)
-- [📄 Work Instructions](work_instruction.md)
-- [📎 Resume](resume.pdf)

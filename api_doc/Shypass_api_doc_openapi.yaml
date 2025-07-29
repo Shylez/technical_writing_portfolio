@@ -1,0 +1,245 @@
+openapi: 3.0.3
+info:
+  title: ShyPass API
+  description: |
+    ShyPass is a secure password manager that provides API access to manage vaults, attachments, and user profile.
+    You can integrate this with your own applications to synchronize, store, and retrieve encrypted secrets.
+  version: 1.0.0
+  contact:
+    name: ShyPass Support
+    email: support@shypass.io
+
+servers:
+  - url: https://api.shypass.io
+    description: Production server
+
+security:
+  - OAuth2: []
+
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /auth/token
+          scopes: {}
+
+paths:
+  /auth/token:
+    post:
+      summary: OAuth2.0 Access Token
+      description: Obtain an OAuth2.0 access token using client credentials.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - client_id
+                - client_secret
+              properties:
+                grant_type:
+                  type: string
+                  example: client_credentials
+                client_id:
+                  type: string
+                client_secret:
+                  type: string
+      responses:
+        '200':
+          description: Token response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                  token_type:
+                    type: string
+                  expires_in:
+                    type: integer
+
+  /vaults:
+    get:
+      summary: Get all vault entries
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of vault entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VaultItem'
+    post:
+      summary: Create a vault entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VaultInput'
+      responses:
+        '201':
+          description: Vault item created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  id:
+                    type: string
+
+  /vaults/{id}:
+    put:
+      summary: Update a vault entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VaultInput'
+      responses:
+        '200':
+          description: Vault item updated
+    delete:
+      summary: Delete a vault entry
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vault item deleted
+
+  /me:
+    get:
+      summary: Get user profile
+      responses:
+        '200':
+          description: User profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+    put:
+      summary: Update user profile
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Profile updated
+
+  /attachments:
+    post:
+      summary: Upload encrypted file
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: File uploaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  url:
+                    type: string
+
+  /attachments/{id}:
+    get:
+      summary: Download encrypted attachment
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns encrypted file stream
+
+components:
+  schemas:
+    VaultItem:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        username:
+          type: string
+        encryptedPassword:
+          type: string
+        note:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    VaultInput:
+      type: object
+      properties:
+        title:
+          type: string
+        username:
+          type: string
+        encryptedPassword:
+          type: string
+        note:
+          type: string
+
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
