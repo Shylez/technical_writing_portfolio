@@ -4,6 +4,9 @@
 
 Welcome to the API documentation for **ShyPass**, a secure password manager. This API allows developers to integrate ShyPass functionalities into your own applications, Sync ShyPass vault data with third-party services, and build a custom frontend for ShyPass. 
 
+### Base URL
+`https://api.shypass.com/v1`
+
 ###  Prerequisites
 To start using the ShyPass API, you will need:
 - A registered ShyPass account
