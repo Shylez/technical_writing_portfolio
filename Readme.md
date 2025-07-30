@@ -7,7 +7,7 @@ Welcome to my technical writing showcase. This portfolio demonstrates my ability
 - [Software Specification Document](./sw_spec_doc/shypass_software_spec.md)
 - [API Documentation](./api_doc/shypass_api_doc.md)
 - [Deployment Walkthrough](./deployment_walkthrough/slack_deployment_walkthrough.md)
-- [Work Instruction](./instructions/how-to-use-vault-ui.md)
+- [Work Instruction](./work_instruction/shypass_risk_assessment_wi.md)
 
  [View my Resume](resume.pdf)
 ---
