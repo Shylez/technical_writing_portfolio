@@ -4,7 +4,7 @@
 
 ## Purpose
 
-The purpose of this work instruction is to guide the structured execution and documentation of a security risk assessment for **Shypass**, a password management application. It operates as part of a broader **system of systems** which includes mobile clients, web interfaces, backend APIs, cloud infrastructure, and third-party integrations. The risk assessment follows a **Zero Trust** security philosophy: no user, device, or service is trusted by default. This instruction ensures threats, vulnerabilities, and business impacts are systematically identified, assessed, and mitigated to protect user data, ensure regulatory compliance, and maintain a strong security posture across Shypass's digital ecosystem.
+The purpose of this work instruction is to guide the structured execution and documentation of a security risk assessment for **Shypass**, a password management application. It operates as part of a broader **system of systems** which includes mobile clients, web interfaces, backend APIs, cloud infrastructure, and third-party integrations. The risk assessment follows a **Zero Trust** security framework which mandates no user, device, or service is trusted by default.
 
 ---
 
@@ -18,11 +18,11 @@ This instruction applies to all functional components of the Shypass platform—
 
 | Role | Responsibility |
 |------|----------------|
-| Risk Analyst | Lead the risk assessment; identify threats, vulnerabilities, and risks |
-| App Dev Lead | Provide technical system details and support in impact analysis |
-| Security Engineer | Conduct vulnerability scans, support control identification |
-| Compliance Officer | Ensure adherence to regulations (GDPR, SOC 2, ISO 27001, etc.) |
-| Technical Writer | Document the risk assessment process and produce the final report in a structured format suitable for auditors, managers, and technical staff |
+| Risk Analyst | Leads the risk assessment process. Their role involves identifying threats, vulnerabilities, and risks. |
+| App Dev Lead | Provide technical system details and support in impact analysis. |
+| Security Engineer | Conduct vulnerability scans, support control identification. |
+| Compliance Officer | Ensure adherence to the regulations. |
+| Technical Writer | Document the risk assessment process and produce the final report in a structured format suitable. |
 
 ---
 
@@ -57,7 +57,7 @@ The next step is to uncover vulnerabilities within the application and its envir
 Once threats and vulnerabilities are mapped, each risk is evaluated based on two dimensions: likelihood of occurrence and potential impact. These are rated on a standard 5-point scale. Using this information, risks are categorized via a risk matrix to classify them as Low, Medium, High, or Critical. This process includes qualitative and quantitative assessments and considers potential business impact such as user data exposure, regulatory non-compliance, or loss of customer trust.
 
 ### 5. Recommend Controls  
-After assessing the risks, the team recommends mitigating controls to reduce or eliminate them. These may include implementing end-to-end encryption, enforcing multi-factor authentication (MFA), adding anomaly detection, or tightening access controls using role-based access control (RBAC). The selection of controls should align with recognized standards such as ISO 27001, CIS Controls, and OWASP ASVS. Each control must have a clearly assigned owner responsible for implementation and ongoing monitoring.
+After assessing the risks, the team recommends mitigating controls to reduce or eliminate them. These may include implementing end-to-end encryption, enforcing multi-factor authentication (MFA), adding anomaly detection, or tightening access controls using role-based access control (RBAC). The selection of controls should align with recognized standards. Each control must have a clearly assigned owner responsible for implementation and ongoing monitoring.
 
 ### 6. Document Findings 
 At this stage, the technical writer compile and structure the findings into a formal Risk Assessment Report. Working closely with the risk analyst and security engineer, the writer gathers supporting evidence for each identified risk and mitigation, drafts an executive summary, outlines the assessment methodology, and presents the results in a structured, audit-friendly format. The language used must be accessible to both technical and non-technical readers. Additionally, the report should include visual elements such as risk heatmaps, timelines, and system diagrams. Drafts should be maintained in Confluence.

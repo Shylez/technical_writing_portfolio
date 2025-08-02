@@ -11,24 +11,24 @@ ShyPass is a cross-platform secure password manager that allows users to store, 
 
 | Term                  | Definition                                                                 |
 |-----------------------|----------------------------------------------------------------------------|
-| AES-256               | Advanced Encryption Standard using 256-bit keys; strong symmetric encryption. |
-| PBKDF2                | Password-Based Key Derivation Function 2; used to derive encryption keys from passwords. |
-| JWT                   | JSON Web Token; compact, URL-safe means of representing claims securely.   |
-| 2FA / TOTP            | Two-Factor Authentication / Time-based One-Time Password for enhanced login security. |
+| AES-256               | Advanced Encryption Standard using 256-bit keys. It is a strong symmetric encryption standard. |
+| PBKDF2                | Password-Based Key Derivation Function 2. It is used to derive encryption keys from passwords. |
+| JWT                   | JSON Web Token. A compact, URL-safe means of representing claims between the frontent and API server securely.   |
+| 2FA / TOTP            | Two-Factor Authentication / Time-based One-Time Password.
 | Vault                 | A secure collection where encrypted items like passwords are stored.       |
 | Encrypted Data        | Information transformed using an algorithm to prevent unauthorized access. |
 | Frontend              | The user-facing part of the application (UI).                              |
 | Backend               | Server-side logic and APIs that power app features.                        |
-| API                   | Application Programming Interface; allows communication between systems.   |
+| API                   | Application Programming Interface. A mechanism that enables communication between the frontend and backend.   |
 | MongoDB               | A NoSQL document database used to store user data and vault items.         |
-| S3                    | Amazon Simple Storage Service; object storage for encrypted file attachments. |
+| S3                    | Amazon Simple Storage Service. A object storage used for storing encrypted file attachments. |
 | Node.js               | JavaScript runtime environment used for backend development.               |
 | React / React Native  | JavaScript libraries for building web and mobile interfaces respectively.  |
 | OAuth                 | Open standard for access delegation, used here for Google login.           |
 | GitHub Actions        | CI/CD automation platform used to build, test, and deploy the app.         |
 | Firebase              | Mobile and web app development platform used here for mobile distribution. |
 | Keystore / Keychain   | Secure storage provided by Android/iOS for storing cryptographic keys.     |
-| HTTPS                 | HyperText Transfer Protocol Secure; encrypts data in transit.              |
+| HTTPS                 | Hyper Text Transfer Protocol Secure.              |
 | Zero Knowledge        | Design principle where server cannot access sensitive data in plaintext.   |
 | TOTP                  | Time-based One-Time Password algorithm used for 2FA.                       |
 | Docker                | Tool for containerizing apps for consistent deployment across environments.|
@@ -84,152 +84,68 @@ SecurePass supports TOTP-based two-factor authentication, adding an extra layer 
 
 ---
 
-## 4. System Components & Data Flow
+## 5. Software Architecture
 
 ![ShyPass Architecture Diagram](./images/shypass_architecture_diagram.jpg)
 
 
-### 4.1. **Frontend (React for Web, React Native for Mobile)**
-This layer serves as the primary interface for users to interact with **ShyPass**. It is responsible for the login screen, password vault UI, file upload/download modules, and shared vaults.
+### 5.1. **Frontend (React for Web, React Native for Mobile)**
+The Frontend serves as the primary interface for users to interact with the app. It lets the user access the login screen, password vault UI, file upload/download modules, and shared vaults.
 
-- Users enter their **master password**, which remains safe with it and never transmitted over the network.
-- The frontend initiates the **local key derivation** (PBKDF2) and handles **AES encryption/decryption**.
-- When viewing or editing a vault entry:
-  - The frontend **requests encrypted data** from the API Server.
-  - It **decrypts the data locally** and displays it to the user.
-- When saving a new item:
-  - Data is **encrypted locally**.
-  - Only ciphertext is sent to the backend via **HTTPS**.
+The User enter their **master password**, which remains safe with it and never transmitted over the network. It also initiates the local key derivation (PBKDF2) and handles AES encryption/decryption. All data are encrypted locally, except for ciphertext which is sent to the backend via HTTPS.
 
----
 
-### 4.2. **Local Crypto (AES-256, PBKDF2)**
-All cryptographic operations are handled on the client using secure platform-native libraries (e.g., WebCrypto, CryptoKit).
 
-- The **master key** is derived from the user’s master password using **PBKDF2**.
-- Vault entries are encrypted and decrypted using **AES-256**.
-- Plaintext data never leaves the device.
+### 5.2. **Local Crypto (AES-256, PBKDF2)**
+All cryptographic operations are handled here using a secure platform-native libraries such as WebCrypto, CryptoKit, andd others. The master key is derived from the user’s master password using PBKDF2. Vault entries are encrypted and decrypted using AES-256 which then goes to the Database via API server.
 
-**Data Flow:**
-`
-Master Password → PBKDF2 → AES Master Key → Encrypt/Decrypt Vault Data  
-Encrypted Data → API Server → MongoDB
-`
 
----
 
-### 4.3. **Key Storage**
-Session keys are stored using secure local methods depending on the platform:
+### 5.3. **Key Storage**
+Session keys are stored using secure local methods depending on the platform. The key is used for all crypto operations during session. When a session ends, the key gets automatically destroyed and the user must re-authenticate. Key storage methods based on the platform are:
 
 - **Mobile**: iOS Keychain, Android Keystore  
-- **Web**: IndexedDB (in-memory or encrypted)  
+- **Web**: IndexedDB  
 - **Desktop**: macOS Keychain, Windows DPAPI  
   
-- When a session ends, the key is destroyed and the user must re-authenticate.
 
-**Data Flow:**
-`Derived AES Key → Stored in Memory → Used for all crypto operations during session
-`
----
 
-### 4.4. **API Server (Node.js)**
-A stateless server acting as a **secure proxy** between client and storage.
 
-- Handles **user authentication**, token issuance (JWT), and vault-related CRUD operations.
-- Does **not decrypt or access plaintext data**.
-- Communicates only via **HTTPS (TLS 1.2+)**.
+### 5.4. **API Server (Node.js)**
+It is a stateless server acting as a secure proxy between the client and storage. The role of the server is to handle user authentication, token issuance (JWT), and vault-related CRUD operations. The data from the frontend goes to the database and back, through this server. All the communications happens nly via HTTPS (TLS 1.2+). It does not decrypt or access plaintext data.
 
-**Data Flow:**
-`Frontend → API Server → Encrypted Data Stored in MongoDB  
-API Server → Client → Delivers Ciphertext for Local Decryption
-`
----
 
-### 4.5. **MongoDB (Encrypted Vault Storage)**
-It is the primary database and stores:
 
-- Encrypted vault items  
-- User metadata (hashed passwords, settings)  
-- Audit logs  
 
-- Event if it get compromised, the vault data remains **cryptographically secure**.
+### 5.5. **MongoDB (Encrypted Vault Storage)**
+It is the primary database and stores highly valuable data such as Encrypted vault items, User metadata and Audit logs. It receives data from the frontend through the API server and sends back responses through the same server. 
 
-**Data Flow:**
 
-`API Server → MongoDB → Stores Encrypted Vault Items  
-MongoDB → API Server → Returns Encrypted Data to Frontend`
+
+
+
+### 5.6. **AWS S3 (Encrypted Attachments)**
+Used for uploading and retrieving encrypted files such as ID proofs, notes, secure documents, and much more. The files are encrypted on the client using the user’s derived key. The Backend issues signed S3 URLs which is used for uploading and downloading the file. The files remain encrypted while in transit as well as at rest. The decyprtion of the files also happen in the frontend.
+
 
 
 ---
 
-### 4.6. **AWS S3 (Encrypted Attachments)**
-Used for uploading and retrieving **encrypted files**, such as ID proofs, notes, or secure documents.
-
-- Files are encrypted **on the client** using the user’s derived key.
-- Backend issues **signed S3 URLs** for upload and download.
-- Files remain encrypted in transit and at rest.
-
-**Data Flow:**
-
-`Client Encrypts File → Upload to S3 (via Signed URL)  
-S3 → Download Encrypted File → Decrypt in Frontend
-`
----
-
-
----
-
-## 5. Security Model
+## 6. Security Model
 <br>
 
 
-| Feature           | Explanation                                                  |
+| Feature           | Description                                               |
 |------------------|--------------------------------------------------------------|
 | Zero Knowledge   | Server never sees plaintext or master password               |
 | End-to-End Crypto| Encryption & decryption happen only on the client side       |
-| AES-256          | Industry standard symmetric encryption for vault items       |
-| PBKDF2           | Key derivation with high iteration count to resist brute-force |
+| AES-256          | A Industry standard symmetric encryption for items stored in the vault.      |
+| PBKDF2           | A Key derivation to help resist brute-force attack|
 | TOTP 2FA         | Adds time-based secondary auth during login                  |
 | Secure Storage   | Platform-specific secure key storage (Keychain, Keystore)    |
 
 ---
 
-## 6. Non-Functional Requirements
-<br>
-### 6.1 Performance  
-The system must respond to user interactions within 300 milliseconds for 95% of operations, ensuring a smooth and responsive experience. API response times should not exceed 500 milliseconds under typical loads.
-
-### 6.2 Scalability  
-SecurePass should be horizontally scalable to support an increasing number of users and vault items without significant degradation in performance. The architecture should support load balancing and distributed databases to accommodate growth.
-
-### 6.3 Availability  
-The system must maintain at least 99.9% uptime, excluding scheduled maintenance windows. Critical services such as authentication, vault access, and file storage must be highly available through redundancy and failover strategies.
-
-### 6.4 Security  
-Security is paramount. All communications must occur over HTTPS. Sensitive data must be encrypted at rest and in transit. The platform must comply with OWASP Top 10 guidelines and undergo regular security audits and penetration testing.
-
-### 6.5 Maintainability  
-The codebase must follow modular, well-documented standards and be easy to update or extend. Continuous Integration/Continuous Deployment (CI/CD) pipelines should be used to automate testing and deployment processes.
-
-### 6.6 Usability  
-The interface should be intuitive for both technical and non-technical users. Accessibility standards (such as WCAG 2.1) must be met to ensure inclusivity for users with disabilities.
-
-### 6.7 Compatibility  
-SecurePass must function consistently across modern web browsers (Chrome, Firefox, Safari, Edge) and mobile operating systems (Android 10+ and iOS 13+). Feature parity must be maintained across all platforms.
-
-### 6.8 Data Integrity  
-The system must ensure that data is never lost or corrupted during storage, synchronization, or retrieval. All write operations must be atomic and transactional, especially when syncing across devices.
-
-### 6.9 Logging and Monitoring  
-Comprehensive logging must be implemented to capture errors, warnings, and system events. Real-time monitoring should be enabled to detect anomalies or downtime, and alert the DevOps team accordingly.
-
-### 6.10 Compliance  
-SecurePass must comply with relevant data privacy regulations such as GDPR, CCPA, and any applicable data localization laws. Users should have the ability to delete their data permanently upon request.
-
-
-
-
----
 
 
 

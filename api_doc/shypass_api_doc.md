@@ -2,7 +2,11 @@
 
 ## ShyPass API Documentation
 
-Welcome to the API documentation for **ShyPass**, a secure password manager. This API allows developers to integrate ShyPass functionalities into your own applications, Sync ShyPass vault data with third-party services, and build a custom frontend for ShyPass. 
+Welcome to the API documentation for **ShyPass**, a secure password manager. This API allows developers to integrate ShyPass functionalities into their own applications, Sync ShyPass vault data with third-party services, and build a custom frontend for ShyPass. 
+
+### Base URL 
+
+`https://api.shypass.com/v1/`
 
 ###  Prerequisites
 To start using the ShyPass API, you will need:
@@ -12,17 +16,13 @@ To start using the ShyPass API, you will need:
 - Basic knowledge of HTTP, RESTful APIs, and JWT
 
 ###  Target Audience
-This documentation is intended for:
-- Developers integrating ShyPass into applications
-- Security engineers automating credentials storage
-- DevOps professionals managing encrypted secrets
+This documentation is intended for Developers integrating ShyPass into their applications.
 
-###  Authentication
-All API requests (except `/auth/token`) require a valid **OAuth2.0 Bearer Token** in the request headers.
 
 ---
 
 ## Authentication
+This API uses OAuth 2.0 Authorization framework to allow third-part application to access its resources. All API requests (except `/auth/token`) require a valid **OAuth2.0 Bearer Token** in the request headers.
 
 ###  OAuth 2.0 Token Endpoint
 
