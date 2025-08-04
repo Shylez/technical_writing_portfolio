@@ -10,7 +10,7 @@ The purpose of this work instruction is to guide the structured execution and do
 
 ## Scope
 
-This instruction applies to all functional components of the Shypass platform—client applications, backend services, and integrations—covering both technical and organizational aspects of the risk landscape.
+This instruction applies to all functional components of the Shypass platform including client applications, backend services, and integrations—covering both technical and organizational aspects of the risk landscape.
 
 ---
 
